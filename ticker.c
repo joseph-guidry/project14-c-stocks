@@ -19,7 +19,6 @@ stock * create_stock(const char * symbol, unsigned int dollar, unsigned int cent
 	return new_stock;
 }
 
-
 //Place in tree based on the nominal share price. 
 int cmp_price(const void * a, const void * b)
 {
@@ -59,8 +58,27 @@ double convert_to_price(int dollar, int cent)
 //How to display the stock structure
 void print_stock(const void * x)
 {
-	//x = (stock *) x
-	printf("Symbol: %s | Price: %u.%u | Company: %s \n", 
+	/*printf("Symbol: %s | Price: %u.%u | Company: %s", 
+		((stock *)x)->symbol, ((stock *)x)->dollar, ((stock *)x)->cent, ((stock *)x)->company);*/
+		
+	printf("%s %u.%u %s", 
 		((stock *)x)->symbol, ((stock *)x)->dollar, ((stock *)x)->cent, ((stock *)x)->company);
+}
+
+int validate_input(const char * symbol, const unsigned int dollar, const unsigned int cent)
+{
+	if ( strlen(symbol) > 5)
+	{
+		fprintf(stderr, "Symbol length is to long, %s \n", symbol);
+		return 1;
+	}
+	
+	if ( (dollar > MAX_VALUE) || (dollar == MAX_VALUE && cent) )
+	{
+		fprintf(stderr, "Amount exceed the limit, %u.%u \n", dollar, cent);
+		return 1;
+	}
+
+	return 0;
 }
 

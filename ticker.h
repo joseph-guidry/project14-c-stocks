@@ -8,8 +8,8 @@
 
 typedef struct stock {
 	char * symbol;
-	int dollar;
-	int cent;
+	unsigned int dollar;
+	unsigned int cent;
 	char * company;
 }stock;
 
@@ -17,3 +17,4 @@ stock * create_stock(const char * symbol, unsigned int dollar, unsigned int cent
 int cmp_price(const void * a, const void * b);
 double convert_to_price(int dollar, int cent);
 void print_stock(const void * x);
+int validate_input(const char * symbol, const unsigned int dollar, const unsigned int cent);

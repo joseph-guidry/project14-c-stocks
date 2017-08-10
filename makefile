@@ -19,6 +19,9 @@ profile: $(CFLAGS) += pg
 
 debug: $(CFLAGS) += -g
 
+test: 
+	./ticker < TickerTestFiles/companies.txt
+
 clean:
 	rm $(OBJECTS) ticker
 
