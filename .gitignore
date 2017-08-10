@@ -1,0 +1,6 @@
+project*
+*swp
+*~
+*.o
+ticker
+*Test*
