@@ -20,8 +20,7 @@ profile: $(CFLAGS) += pg
 debug: $(CFLAGS) += -g
 
 test: 
-	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat
-	
+	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat 2> /dev/null	
 
 clean:
 	rm -f *.o ticker
