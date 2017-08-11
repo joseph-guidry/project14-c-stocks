@@ -8,10 +8,6 @@
 	3. How to modify it.
 */
 
-void modify_node(Node * t, void * data)
-{
-	return;
-}
 
 void destroy_tree(Node * t)
 {
@@ -36,27 +32,26 @@ int get_height(Node * t)
 	}
 }
 
-void * search_val(Node * t, char * key)
+Node ** search_val(Node ** t, char * key, int (*compare)(const void * a, const void * b))
 {
 	//This function takes a root node, and a key word to search for.
 	//Returns the word that was succesfully matched, else it returns nothing.
-	
-	if ( t == NULL)
+	if ( *t == NULL)
 	{	//Reached end of search -- Not in the tree;
 		return NULL;
 	}	
 	
 	//If there are leaf nodes remaining to search.
-	int order = t->compare(key, t->key);
+	int order = compare(key, (*t)->key);
 	//If compare function returns as equal (-1)
 	if ( order  < 0)
 	{
-		return t->key; 
+		return &(*t); 
 	}
 	//Else the compare function returns either greater than (1) or less than (0).
 	else 
 	{
-		return search_val(t->child[order], key);
+		return search_val(&(*t)->child[order], key, compare);
 	}
 }
 
@@ -115,7 +110,7 @@ void rebalance(Node **t)
 	}
 }
 
-void insert(Node **t, void * key, int size, int (*compare)(const void * a, const void * b), void (*display)(const void * data))
+void insert(Node **t, void * key, int size, int (*compare)(const void * a, const void * b), void (*display)(const void * data1), void (*update)(void ** temp, void * data1) )
 {
 	if (*t == NULL)
 	{
@@ -136,15 +131,20 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 		
 		(*t)->compare = compare;
 		(*t)->display = display;
+		(*t)->modify = update;
+		
+		
 		return;
 	}
-	else if ( compare(key, (*t)->key)  < 0)
+	else if ( compare(key, (*t)->key)  < 0 )
 	{
+		//Try modifying current node with input info
+		(*t)->modify((void**)t , key );
 		return;
 	}
 	else
 	{
-		insert(&(*t)->child[(*t)->compare(key, (*t)->key)], key, size, compare, display);
+		insert(&(*t)->child[(*t)->compare(key, (*t)->key)], key, size, compare, display, update);
 		rebalance(t);
 		return;
 	}

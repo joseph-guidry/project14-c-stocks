@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Wpedantic -Wwrite-strings -Wstack-usage=1024 -Wfloat-equ
 
 all: ticker
 
-ticker: avlTicker.o ticker.o avlTicker.h
+ticker: driver.c  avlTicker.o ticker.o ticker.h avlTicker.h
 	gcc $(CFLAGS) -o ticker driver.c ticker.o avlTicker.o 
 
 ticker.o: ticker.c 
@@ -20,9 +20,10 @@ profile: $(CFLAGS) += pg
 debug: $(CFLAGS) += -g
 
 test: 
-	./ticker < TickerTestFiles/companies.txt
+	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat
+	
 
 clean:
-	rm $(OBJECTS) ticker
+	rm -f *.o ticker
 
 

@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #define SYMBOL_SZ 5
 #define NAME_SZ 56
 #define MAX_VALUE 1000000
 
 typedef struct stock {
 	char * symbol;
-	unsigned int dollar;
-	unsigned int cent;
+	int dollar;
+	int cent;
 	char * company;
 }stock;
 
-stock * create_stock(const char * symbol, unsigned int dollar, unsigned int cent, const char * company);
+stock * create_stock(const char * symbol, int dollar, int cent, const char * company);
 int cmp_price(const void * a, const void * b);
+int compare_symbols(const void *a, const void *b);
 double convert_to_price(int dollar, int cent);
 void print_stock(const void * x);
-int validate_input(const char * symbol, const unsigned int dollar, const unsigned int cent);
+int validate_input(const char * symbol, const int dollar, const int cent);
+void modify_node(void ** temp, void * data1);
