@@ -1,9 +1,7 @@
 #include "ticker.h"
-#include "avlTicker.h"
 
 
-
-stock * create_stock(const char * symbol, int dollar, int cent, const char * company)
+stock * create_stock(char * symbol, int dollar, int cent, char * company)
 {
 	stock * new_stock = malloc(sizeof(stock));
 	if ( !new_stock)
@@ -54,40 +52,50 @@ void update_stock(Node ** stocks, char * symbol, int dollar, int cent)
 	
 }
 
-void modify_node(void ** temp, void * data1)
+double evalute_value(int dollar1, int cent1, int dollar2, int cent2)
 {
-	printf("here in modify\n");
+	if ( dollar1 < 0 )
+		 cent1 *= -1;
+		 
+	if ( dollar2 < 0)
+		cent2 *= -1;
 
-	//printf("update dollar: %d.%d\n", *((stock*)data)->dollar), *((int*)cent));
-	//Ensure there is enough cents to do subtraction from
+	//printf("adding dollar: %02f + cent: %02f \n", (double) dollar1, ((double)cent1/100));
+	double value1 = (double)dollar1 + ((double)cent1/100);
+	//printf("adding dollar: %02f + cent: %02f \n", (double)dollar2, ((double)cent2/100));
+	double value2 = (double)dollar2 + ((double)cent2/100);
+	
+	//printf("value1: %0.2f | value2: %0.2f | equals: %0.2f \n", value1, value2, value1 + value2);
+	
+	return value1 + value2;
+}
+
+void modify_node(Node ** temp, void * data)
+{
+	temp = ((Node **)temp);
+	int total_dollar, total_cent;
+	double result;
 	
 	
 	/*
-	if ( *(int*)dollar < 0 )
-		 *(int*)cent *= -1;
-		 
-	int total_dollar = ((stock*)(*temp)->key)->dollar + (--(*(int*)dollar));
-	int total_cent = ((stock*)(*temp)->key)->cent  + (100+(*(int*)cent));
-	
-	if ( (total_dollar >= 0) || ( (total_dollar == 0) && (total_cent > 0) ) )
+	printf("here in modify\n");
+	printf("original dollar:  %d.%02d\n",  ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent );
+	printf("update dollar1: %d.%02d\n", ((stock*)data)->dollar, ((stock*)data)->cent );
+	*/
+	if( (result = evalute_value( ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent, ((stock*)data)->dollar, ((stock*)data)->cent )) <= 0.00 )
 	{
-		((stock*)(*temp)->key)->dollar = total_dollar;
-		((stock*)(*temp)->key)->cent = total_cent;
-		//printf("temp dollar: %d.%d\n", ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent);
-	}
-	else
-	{
+		//printf("negative value\n");
 		fprintf(stderr, "Transaction puts value below $0.01\n");
 		return;
 	}
-	//printf("temp dollar: %d.%d\n", ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent);
-	while ( ((stock*)(*temp)->key)->cent > 99 )
+	else
 	{
-		((stock*)(*temp)->key)->cent -= 100;
-		((stock*)(*temp)->key)->dollar++;
+		total_dollar = (int) (result /1);
+		total_cent = ((double)(result - total_dollar) * 100 + 0.5) ;
 	}
-	*/
 	
+	((stock*)(*temp)->key)->dollar = total_dollar;
+	((stock*)(*temp)->key)->cent = total_cent;
 	
 	return;
 }
@@ -131,6 +139,6 @@ double convert_to_price(int dollar, int cent)
 //How to display the stock structure
 void print_stock(const void * x)
 {
-	printf("%s %d.%d %s\n", 
+	printf("%s %d.%02d %s\n", 
 		((stock *)x)->symbol, ((stock *)x)->dollar, ((stock *)x)->cent, ((stock *)x)->company);
 }

@@ -110,7 +110,7 @@ void rebalance(Node **t)
 	}
 }
 
-void insert(Node **t, void * key, int size, int (*compare)(const void * a, const void * b), void (*display)(const void * data1), void (*update)(void ** temp, void * data1) )
+void insert(Node **t, void * key, int size, int (*compare)(const void * a, const void * b), void (*display)(const void * data1), void (*update)(Node ** temp, void * data1) )
 {
 	if (*t == NULL)
 	{
@@ -120,6 +120,7 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 			fprintf(stderr, "Memory error\n");
 			return;
 		}
+		
 		
 		(*t)->child[0] = NULL;
 		(*t)->child[1] = NULL;
@@ -131,7 +132,7 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 		
 		(*t)->compare = compare;
 		(*t)->display = display;
-		(*t)->modify = update;
+		(*t)->modify =  update;
 		
 		
 		return;
@@ -139,7 +140,7 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 	else if ( compare(key, (*t)->key)  < 0 )
 	{
 		//Try modifying current node with input info
-		(*t)->modify((void**)t , key );
+		(*t)->modify(t , key );
 		return;
 	}
 	else
