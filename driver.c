@@ -32,8 +32,6 @@ int main(int argc, char **argv)
 				stock * new_stock = create_stock(symbol, dollar, cent, company);
 				//print_stock(new_stock);
 				insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
-				//
-				//insert(&new, new_stock, sizeof(stock), cmp_price, print_stock, modify_node);
 			}
 		}
 	
@@ -54,7 +52,6 @@ int main(int argc, char **argv)
 			stock * new_stock = create_stock(symbol, dollar, cent, company);
 			//print_stock(new_stock);
 			insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
-			//insert(&new, new_stock, sizeof(stock), cmp_price, print_stock, modify_node);
 		}
 	}
 
@@ -69,7 +66,7 @@ int main(int argc, char **argv)
 	
 	printf("\n\nPRINTING ORDERED BY NOMINAL VALUE BST\n\n");
 	print_in_order(new);
-	
+	destroy_tree(new);
     return 0;
 }
 

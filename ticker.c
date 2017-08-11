@@ -106,7 +106,6 @@ int cmp_price(const void * a, const void * b)
 	stock * first = (stock *) a;
 	stock * second = (stock *) b;
 	double result = convert_to_price(first->dollar, first->cent) - convert_to_price(second->dollar, second->cent);
-	
 	if ( result < 0 )
 		return 0;
 	else if ( result > 0 )
@@ -131,7 +130,7 @@ double convert_to_price(int dollar, int cent)
 {
 	double value = 0.0;
 	
-	value = dollar + (cent / 100);
+	value = dollar + ((double)cent / 100);
 	
 	return value;
 }
