@@ -1,14 +1,6 @@
 #include "avlTicker.h"
 
 
-//Get the item to modify and what to update it to. 
-/*
-	1. Search for element; Return to modify function.
-	2. Member to modify
-	3. How to modify it.
-*/
-
-
 void destroy_tree(Node * t)
 {
 	if (t != NULL)
@@ -64,7 +56,7 @@ void adjust_height(Node * t)
 
 void rotate(Node ** root, int d)
 {
-	//Implemenation of AVL tree rotation that picks the direction based on the data it receives from rebalance().
+	//Implemenation of AVL tree rotation 
 	Node * oldRoot;
 	Node * newRoot;
 	Node * oldMiddle;
@@ -121,15 +113,15 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 			return;
 		}
 		
-		
 		(*t)->child[0] = NULL;
 		(*t)->child[1] = NULL;
 		
-		//Insert the word into a new BST.
+		//Insert the data into a new BST.
 		(*t)->key = malloc(size);
 		memcpy((*t)->key, key, size);
 		(*t)->height = 1;
 		
+		//Pass utility functions used by nodes
 		(*t)->compare = compare;
 		(*t)->display = display;
 		(*t)->modify =  update;
