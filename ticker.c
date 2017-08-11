@@ -102,7 +102,7 @@ void modify_node(Node ** temp, void * data)
 
 
 
-static double convert_to_price(int dollar, int cent)
+double convert_to_price(int dollar, int cent)
 {
 	double value = 0.0;
 	

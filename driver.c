@@ -12,7 +12,7 @@ void update_stock(Node ** stocks, char * symbol, int dollar, int cent);
 
 int main(int argc, char **argv)
 {
-	if ( argc < 2)
+	if ( argc < 1)
 		usage(argv[0]);
 		
 	FILE * input = check_file(argv[1]);
@@ -23,19 +23,24 @@ int main(int argc, char **argv)
 	char symbol[5], company[NAME_SZ], buffer[BUFF_SIZE];
 	
 	//Build BST from argv[1] file.
-	while ( (fscanf(input, "%s %d.%d", symbol, &dollar, &cent) ) && fgets(company, NAME_SZ, input) ) 
+	if( input )
 	{
-		if (validate_input(symbol, dollar, cent) )
-		{	
-			//NULL Terminate the company string. 
-			company[strlen(company) - 1] = '\0';
-			//Fill the first BST with the words of the first file
-			stock * new_stock = create_stock(symbol, dollar, cent, company);
-			print_stock(new_stock);
-			insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
+		while ( (fscanf(input, "%s %d.%d", symbol, &dollar, &cent) ) && fgets(company, NAME_SZ, input) ) 
+		{
+			if (validate_input(symbol, dollar, cent) )
+			{	
+				//NULL Terminate the company string. 
+				company[strlen(company) - 1] = '\0';
+				//Fill the first BST with the words of the first file
+				stock * new_stock = create_stock(symbol, dollar, cent, company);
+				print_stock(new_stock);
+				insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
+				//Reset Values for next ticker symbol
+				symbol[0] = company[0] = '\0';
+				dollar = cent = 0;
+			}
 		}
 	}
-	
 	printf("\n\nGETTING STOCK UPDATES\n\n");
 	//Take input from a input through STDIN
 	while (  fgets(buffer, BUFF_SIZE, stdin) )
@@ -55,6 +60,9 @@ int main(int argc, char **argv)
 			stock * new_stock = create_stock(symbol, dollar, cent, company);
 			print_stock(new_stock);
 			insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
+			//Reset Values for next ticker symbol
+			symbol[0] = company[0] = '\0';
+			dollar = cent = 0;
 		}
 	}
 
@@ -87,11 +95,12 @@ void reorder_tree(Node * stocks, Node ** new)
 FILE * check_file( char * filename)
 {
 	FILE * input = fopen(filename, "r");
+	
 	if ( !input)
 	{
 		fprintf(stderr, "Failed to open %s\n", filename);
-		exit(2);
 	}
+	
 	return input;
 }
 

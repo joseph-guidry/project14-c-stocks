@@ -15,9 +15,11 @@ ticker.o: ticker.c
 avlTicker.o: avlTicker.c avlTicker.h
 	gcc -c -o avlTicker.o avlTicker.c
 
-profile: $(CFLAGS) += pg
+profile: ticker.o avlTicker.o driver.c
+	gcc $(CFLAGS) -pg -o ticker driver.c ticker.o avlTicker.o
 
-debug: $(CFLAGS) += -g
+debug: ticker.o avlTicker.o driver.c
+	gcc $(CFLAGS) -g -o ticker driver.c ticker.o avlTicker.o
 
 test: 
 	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat 2> /dev/null	
