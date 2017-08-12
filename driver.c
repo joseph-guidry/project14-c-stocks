@@ -8,20 +8,11 @@ void reorder_tree(Node * stocks, Node ** new);
 FILE * check_file( char * filename);
 void usage(const char * input);
 char * get_company(char * buffer);
+int get_num_length(int dollar, int cent);
 void update_stock(Node ** stocks, char * symbol, int dollar, int cent);
+void delete_stuff(Node * delete);
 
-/*Attempt to free all malloced memory -> GOOD LUCK */
-void delete_stuff(Node * delete)
-{
-	if ( delete )
-	{
-		delete_stuff(delete->child[0]);
-		delete_stuff(delete->child[1]);
-		printf("((stock*)delete->key)->symbol = %s \n", ((stock*)delete->key)->symbol);
-		destroy_stock(((stock*)delete->key));
-		free(delete);
-	}
-}
+
 
 int main(int argc, char **argv)
 {
@@ -32,12 +23,16 @@ int main(int argc, char **argv)
 	
 	Node * new = NULL;
 	Node * stocks = NULL;
-	int dollar, cent;
+	int dollar = 0, cent = 0;
 	char symbol[5], company[NAME_SZ], buffer[BUFF_SIZE];
-	
+	const char * row = "+-----------------------------------------------+\n";
 	//Build BST from argv[1] file.
 	if( input )
 	{
+		printf("%s", row);
+		printf("\tGETTING STOCK DATA from %s\t\n", argv[1] != NULL? "file": "no file");
+		printf("%s", row);
+		
 		while ( (fscanf(input, "%s %d.%d", symbol, &dollar, &cent) ) && fgets(company, NAME_SZ, input) ) 
 		{
 			if (validate_input(symbol, dollar, cent) )
@@ -49,18 +44,18 @@ int main(int argc, char **argv)
 				print_stock(new_stock);
 				insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
 				//Reset Values for next ticker symbol
-				destroy_stock(new_stock);
 				symbol[0] = company[0] = '\0';
 				dollar = cent = 0;
 				
 			}
 		}
+		//If file is open, then close it.
+		fclose(input);
 	}
 	
-	//If file is open, then close it.
-	if (input)
-		fclose(input);
-	printf("\n\nGETTING STOCK UPDATES\n\n");
+	printf("%s", row);
+	printf("\t\tGETTING STOCK UPDATES\t\t\n");
+	printf("%s", row);
 	//Take input from a input through STDIN
 	while (  fgets(buffer, BUFF_SIZE, stdin) )
 	{	
@@ -80,19 +75,24 @@ int main(int argc, char **argv)
 			print_stock(new_stock);
 			insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
 			//Reset Values for next ticker symbol
-			destroy_stock(new_stock);
 			symbol[0] = company[0] = '\0';
 			dollar = cent = 0;
 		}
 	}
+	/*
+	printf("%s", row);
+	printf("\t\tIn order by SYMBOL\t\t\n");
+	printf("%s", row);
 
-	printf("\n\nPRINTING in order by SYMBOL BST\n\n");
 	print_in_order(stocks);
-
+	*/
 	reorder_tree(stocks, &new);
 	delete_stuff(stocks);
 	
-	printf("\n\nPRINTING in order by NOMINAL VALUE BST\n\n");
+	printf("%s", row);
+	printf("\tIn order by NOMINAL VALUE\t\t\n");
+	printf("%s", row);
+	
 	print_in_order(new);
 	delete_stuff(new);
     return 0;
@@ -118,7 +118,7 @@ FILE * check_file( char * filename)
 	
 	if ( !input)
 	{
-		fprintf(stderr, "Failed to open %s\n", filename);
+		fprintf(stderr, "No file open: using standard input\n");
 	}
 	
 	return input;
@@ -129,27 +129,57 @@ void usage(const char * input)
 	fprintf(stderr, "usage error: %s [filename] < FILE * stream \n", input);
 	exit(1);
 }
+
 /* This function takes input data and ensures it is valid.*/
 int validate_input(const char * symbol, const int dollar, const int cent)
 {
-
+	//Conduct checks to validate the input from file and stdin.
+	if ( !symbol )
+	{
+		fprintf(stderr, "Invalid data \n");
+		return 0;
+	}
+	
 	if ( strlen(symbol) > 5)
 	{
-		fprintf(stderr, "Symbol length is to long, %s \n", symbol);
+		fprintf(stderr, "Error: ticker symbol longer than 5 characters. The record will be skipped.\n");
 		return 0;
 	}
 	if ( (dollar > MAX_VALUE) || (dollar == MAX_VALUE && cent) )
 	{
-		fprintf(stderr, "Amount exceed the limit, %d.%d \n", dollar, cent);
+		fprintf(stderr, "Error: price is larger than $1,000,000.00. The record will be skipped.\n");
 		return 0;
 	}
-	if ( (dollar * -1)> MAX_VALUE ) //Convert dollar.cent to string and ensure strlen < 10?
+	if ( get_num_length(dollar, cent) > 9)
 	{
-		fprintf(stderr, "Amount exceed the limit, %d.%d \n", dollar, cent);
+		fprintf(stderr, "Error: price longer than 10 characters. The record will be skipped.\n");
 		return 0;
 	}
+	
 	return 1;
 }
+
+int get_num_length(int dollar, int cent)
+{
+	int count = 0;
+	if (dollar < 0)
+	{
+		count++;
+		dollar *= -1;
+	}
+	while ( dollar > 0)
+	{
+		count++;
+		dollar /= 10;
+	}
+	while ( cent > 0)
+	{
+		count++;
+		cent /= 10;
+	}
+	return count;
+}
+
 /*Returns the value that is the company information*/
 char * get_company(char * buffer)
 {
@@ -165,5 +195,14 @@ char * get_company(char * buffer)
 	return NULL;
 }
 
-
-
+/*Attempt to free all malloced memory -> GOOD LUCK */
+void delete_stuff(Node * delete)
+{
+	if ( delete )
+	{
+		delete_stuff(delete->child[0]);
+		delete_stuff(delete->child[1]);
+		destroy_stock(((stock*)delete->key));
+		free(delete);
+	}
+}
