@@ -3,7 +3,7 @@
 #include <string.h>
 #include "avlTicker.h"
 
-#define SYMBOL_SZ 5
+#define SYMBOL_SZ 6
 #define NAME_SZ 64
 #define MAX_VALUE 1000000
 

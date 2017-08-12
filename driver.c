@@ -63,7 +63,14 @@ int main(int argc, char **argv)
 		//Only will trigger on  blank line
 		if(  !(sscanf(buffer, "%s %d.%d", symbol, &dollar, &cent)) || (buffer[0] == '\n') )
 			continue;
-
+		
+		if ( (dollar == 0) && (cent == 0) )
+		{
+			buffer[strlen(buffer) - 1] = '\0';
+			fprintf(stderr, "Input acheives no effect: [%s]\n", buffer);
+			continue;
+		}
+		
 		//Get the company name of the stock.
 		strncpy(company, get_company(buffer), NAME_SZ);
 		//NULL Terminate the company string.
@@ -108,9 +115,12 @@ void reorder_tree(Node * stocks, Node ** new)
 	if ( stocks != NULL)
 	{
 		//GRAB individual data pieces from node and create new node with that data.
-		stock * new_stock = create_stock( ((stock *)(stocks->key))->symbol, ((stock *)(stocks->key))->dollar, ((stock *)(stocks->key))->cent, ((stock *)(stocks->key))->company );
-		insert(new, new_stock, sizeof(stock), cmp_price, print_stock, modify_node);
-		
+		//ENSURE That dollar and cent amount is positive.
+		if ( (((stock *)(stocks->key))->dollar > 0 ) || ( (((stock *)(stocks->key))->dollar == 0 ) && ( ((stock *)(stocks->key))->cent > 0 )  ) )
+		{
+			stock * new_stock = create_stock( ((stock *)(stocks->key))->symbol, ((stock *)(stocks->key))->dollar, ((stock *)(stocks->key))->cent, ((stock *)(stocks->key))->company );
+			insert(new, new_stock, sizeof(stock), cmp_price, print_stock, modify_node);
+		}
 		reorder_tree(stocks->child[0], new);
 		reorder_tree(stocks->child[1], new);
 	}

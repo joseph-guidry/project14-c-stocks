@@ -9,7 +9,6 @@ stock * create_stock(char * symbol, int dollar, int cent, char * company)
 		fprintf(stderr, "Memory error\n");
 		return NULL;
 	}
-	
 	new_stock->dollar = dollar;
 	new_stock->cent = cent;
 	new_stock->symbol = malloc(SYMBOL_SZ);
@@ -31,8 +30,7 @@ void destroy_stock(stock * old )
 //How to display the stock structure
 void print_stock(const void * x)
 {
-	printf("%s %d.%02d %s\n", 
-		((stock *)x)->symbol, ((stock *)x)->dollar, ((stock *)x)->cent, ((stock *)x)->company);
+	printf("%5s %7d.%02d %s\n", ((stock *)x)->symbol, ((stock *)x)->dollar, ((stock *)x)->cent, ((stock *)x)->company);
 }
 
 int compare_symbols(const void *a, const void *b)
