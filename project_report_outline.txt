@@ -20,8 +20,8 @@ Considerations:
 Initial Design:
 	<A paragraph or more that adequately describes your program's structure and layout discussing the various modules (.c and corresponding .h files) that you implemented>
 	
-	The program is structured with the avlIntersect.c as the implementation of the AVL Tree, and the
-	interface, avlIntersect.h, holds all the function prototypes and structure of the tree node.  
+	The program is structured with the avlTicker.c as the implementation of the AVL Tree, and the
+	interface, avlTicker.h, holds all the function prototypes and structure of the tree node.  
 	The insert, search and print functions have access to the data in the tree. The remaining
 	functions handle the balancing of the tree to ensure a optimal search and insert speed. Helper functions for 
 	comparing, displaying and modifying are passed and stored within the node structure.
