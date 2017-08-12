@@ -3,6 +3,7 @@
 
 stock * create_stock(char * symbol, int dollar, int cent, char * company)
 {
+	printf("malloc new_stock\n");
 	stock * new_stock = malloc(sizeof(stock));
 	if ( !new_stock)
 	{
@@ -18,6 +19,14 @@ stock * create_stock(char * symbol, int dollar, int cent, char * company)
 	strncpy(new_stock->company, company, NAME_SZ);
 	
 	return new_stock;
+}
+
+
+void destroy_stock(stock * old )
+{
+	free(old->symbol);
+	free(old->company);
+	free(old);
 }
 
 //How to display the stock structure
@@ -97,6 +106,7 @@ void modify_node(Node ** temp, void * data)
 	}
 	((stock*)(*temp)->key)->dollar = total_dollar;
 	((stock*)(*temp)->key)->cent = total_cent;
+	
 	return;
 }
 

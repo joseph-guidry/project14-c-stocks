@@ -106,6 +106,7 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 {
 	if (*t == NULL)
 	{
+		printf("malloc new node\n");
 		*t = malloc(sizeof(struct Node));
 		if (t == NULL)
 		{
@@ -117,6 +118,7 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 		(*t)->child[1] = NULL;
 		
 		//Insert the data into a new BST.
+		printf("malloc new node data\n");
 		(*t)->key = malloc(size);
 		memcpy((*t)->key, key, size);
 		(*t)->height = 1;

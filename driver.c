@@ -10,6 +10,19 @@ void usage(const char * input);
 char * get_company(char * buffer);
 void update_stock(Node ** stocks, char * symbol, int dollar, int cent);
 
+/*Attempt to free all malloced memory -> GOOD LUCK */
+void delete_stuff(Node * delete)
+{
+	if ( delete )
+	{
+		delete_stuff(delete->child[0]);
+		delete_stuff(delete->child[1]);
+		printf("((stock*)delete->key)->symbol = %s \n", ((stock*)delete->key)->symbol);
+		destroy_stock(((stock*)delete->key));
+		free(delete);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if ( argc < 1)
@@ -36,11 +49,17 @@ int main(int argc, char **argv)
 				print_stock(new_stock);
 				insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
 				//Reset Values for next ticker symbol
+				destroy_stock(new_stock);
 				symbol[0] = company[0] = '\0';
 				dollar = cent = 0;
+				
 			}
 		}
 	}
+	
+	//If file is open, then close it.
+	if (input)
+		fclose(input);
 	printf("\n\nGETTING STOCK UPDATES\n\n");
 	//Take input from a input through STDIN
 	while (  fgets(buffer, BUFF_SIZE, stdin) )
@@ -61,6 +80,7 @@ int main(int argc, char **argv)
 			print_stock(new_stock);
 			insert(&stocks, new_stock, sizeof(stock), compare_symbols, print_stock, modify_node);
 			//Reset Values for next ticker symbol
+			destroy_stock(new_stock);
 			symbol[0] = company[0] = '\0';
 			dollar = cent = 0;
 		}
@@ -70,11 +90,11 @@ int main(int argc, char **argv)
 	print_in_order(stocks);
 
 	reorder_tree(stocks, &new);
-	destroy_tree(stocks);
+	delete_stuff(stocks);
 	
 	printf("\n\nPRINTING in order by NOMINAL VALUE BST\n\n");
 	print_in_order(new);
-	destroy_tree(new);
+	delete_stuff(new);
     return 0;
 }
 
@@ -144,4 +164,6 @@ char * get_company(char * buffer)
 	}
 	return NULL;
 }
+
+
 

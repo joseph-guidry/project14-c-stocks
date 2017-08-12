@@ -15,6 +15,7 @@ typedef struct stock {
 }stock;
 
 stock * create_stock(char * symbol, int dollar, int cent, char * company);
+void destroy_stock(stock * old );
 int cmp_price(const void * a, const void * b);
 int compare_symbols(const void *a, const void *b);
 double convert_to_price(int dollar, int cent);
