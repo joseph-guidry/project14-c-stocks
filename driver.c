@@ -97,7 +97,9 @@ int main(int argc, char **argv)
 	printf("%s", row);
 
 	print_in_order(stocks);
+	printf("\n");
 	*/
+	
 	reorder_tree(stocks, &new);
 	delete_stuff(stocks);
 	
@@ -106,6 +108,7 @@ int main(int argc, char **argv)
 	printf("%s", row);
 	
 	print_in_order(new);
+	printf("\n");
 	delete_stuff(new);
     return 0;
 }
