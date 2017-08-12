@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "ticker.h"
 
 #define BUFF_SIZE 100
@@ -78,7 +79,11 @@ int main(int argc, char **argv)
 			symbol[0] = company[0] = '\0';
 			dollar = cent = 0;
 		}
+		sleep(1);
 	}
+	
+	// This section is commented out but would display 
+	// the BST in order based on SYMBOL.	
 	/*
 	printf("%s", row);
 	printf("\t\tIn order by SYMBOL\t\t\n");

@@ -22,7 +22,7 @@ debug: ticker.o avlTicker.o driver.c
 	gcc $(CFLAGS) -g -o ticker driver.c ticker.o avlTicker.o
 
 test: 
-	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat 2> /dev/null	
+	./ticker TickerTestFiles/companies.txt < TickerTestFiles/stock_changes.dat 
 
 clean:
 	rm -f *.o ticker

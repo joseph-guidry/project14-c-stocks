@@ -99,7 +99,7 @@ void modify_node(Node ** temp, void * data)
 	//check if operation will result in stock price falling below $0.01
 	if( (result = evalute_value( ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent, ((stock*)data)->dollar, ((stock*)data)->cent )) <= 0.00 )
 	{
-		fprintf(stderr, "Transaction puts value below $0.01\n");
+		fprintf(stderr, "Attempt adjust stock below $0.01. Transaction will NOT be completed\n");
 		return;
 	}
 	else
