@@ -24,29 +24,6 @@ int get_height(Node * t)
 	}
 }
 
-Node ** search_val(Node ** t, char * key, int (*compare)(const void * a, const void * b))
-{
-	//This function takes a root node, and a key word to search for.
-	//Returns the word that was succesfully matched, else it returns nothing.
-	if ( *t == NULL)
-	{	//Reached end of search -- Not in the tree;
-		return NULL;
-	}	
-	
-	//If there are leaf nodes remaining to search.
-	int order = compare(key, (*t)->key);
-	//If compare function returns as equal (-1)
-	if ( order  < 0)
-	{
-		return &(*t); 
-	}
-	//Else the compare function returns either greater than (1) or less than (0).
-	else 
-	{
-		return search_val(&(*t)->child[order], key, compare);
-	}
-}
-
 void adjust_height(Node * t)
 {
 	//Double check and adjust
@@ -106,7 +83,6 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 {
 	if (*t == NULL)
 	{
-		printf("malloc new node\n");
 		*t = malloc(sizeof(struct Node));
 		if (t == NULL)
 		{
@@ -118,7 +94,6 @@ void insert(Node **t, void * key, int size, int (*compare)(const void * a, const
 		(*t)->child[1] = NULL;
 		
 		//Insert the data into a new BST.
-		printf("malloc new node data\n");
 		(*t)->key = malloc(size);
 		memcpy((*t)->key, key, size);
 		(*t)->height = 1;
@@ -152,16 +127,6 @@ void print_in_order(Node * t)
 		print_in_order(t->child[0]);
 		t->display(t->key);
 		print_in_order(t->child[1]);
-	}
-}
-
-void print_reverse_order(Node * t)
-{
-	if ( t != NULL)
-	{
-		print_reverse_order(t->child[1]);
-		t->display(t->key);
-		print_reverse_order(t->child[0]);
 	}
 }
 

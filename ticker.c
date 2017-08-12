@@ -3,7 +3,6 @@
 
 stock * create_stock(char * symbol, int dollar, int cent, char * company)
 {
-	printf("malloc new_stock\n");
 	stock * new_stock = malloc(sizeof(stock));
 	if ( !new_stock)
 	{
