@@ -1,0 +1,88 @@
+Name: Guidry, Joseph
+Date: 11 AUG 2017
+Current Module: Data Structures and Algorithms II
+Project Name:  Stock Ticker
+
+Project Goals:
+	<A two to three sentence description of the project and its intent>
+     
+	- The goal of this project is to incorporate the use of data structures to implement efficient algorithms, to read stock 	
+	ticker lines from a file first if present, then input from stdin.
+	
+Considerations:
+	<A bulleted list of considerations and conditions which affected the design of your project>
+    - Implementing an Abstract Data type: I used an AVL Tree.
+    - Reading a single line per entry.
+    - Separate each field and add to node in BST.
+    - Input in alphabetical symbol order.
+    - Output in nominal price order.
+
+Initial Design:
+	<A paragraph or more that adequately describes your program's structure and layout discussing the various modules (.c and corresponding .h files) that you implemented>
+	
+	The program is structured with the avlIntersect.c as the implementation of the AVL Tree, and the
+	interface, avlIntersect.h, holds all the function prototypes and structure of the tree node.  
+	The insert, search and print functions have access to the data in the tree. The remaining
+	functions handle the balancing of the tree to ensure a optimal search and insert speed. Helper functions for 
+	comparing, displaying and modifying are passed and stored within the node structure.
+	
+	The driver.c file handles the file validating and word parsing of the input data. The first
+	file is inserted into a tree, and any other data from stdin will be made after validation of input. A new tree is 
+	constructed to all the data to be presented by nominal price, ascending to the highest. The trees are 
+	destroyed following the printing of the last tree to the screen. The ticker.c file contains the functions used in dealing 
+	with creating and destroy stock structures.  The compare functions are stored in this file.
+
+Data Flow:
+	<A paragraph or longer describing the data flow of the program in a sequential manner.  Include a diagram when necessary.>
+	
+	1. Attempts to open the value at argv[1], if no file is returned , input will be expected from stdin.
+	2. Using a combination of the scanf functions and fgets,  to grab data from the file stream. 
+	3. Validate input data, then create stock structure.
+	4. Insert the structure into the tree, assign as the data for the node structure.
+	5. After successful insertion, tree will determine if re-balancing is required.
+	6. Until End of File on stdin has been met,continue grabbing lines from stdin.
+	7. Once End of File has been reached, the requirement for printing in ascending nominal price is handled by reorder_tree.
+	8. Print newly sorted BST.
+
+Communication Protocol:
+	<Discuss any custom communication protocol you have used including the various request and responses that may be sent and received.>
+
+	None.
+	
+Potential Pitfalls:
+	<Discuss any potential issues that you might run into while creating the project>
+	
+	1. Re-purposing a previously built AVL Tree with ints to handle data structures.
+	2. File input manipulation.
+	3. Using a BST sorted for 1 factor to copy into another with a different comparison measure.( Symbol name vs Nominal price )
+	
+Test Plan:
+	User Test:
+ 		<Describe the steps taken for each user test.>
+ 		1. Read in file data into BST. 
+ 		2. Read in stdin data and insert into BST.
+ 		3. Handle matching symbols for matching, which would need to modify current node data.
+ 		4. Handle edge cases of empty files and larger than expected words, or invalid input.
+ 		
+	Test Cases:
+		<A brief overview of the test cases that you implemented.>
+		1. Input is normal words, and sentence structures.
+		2. Input includes multiple whitespace, numbers, and mixed upper/lower case letters.
+		3. Use 3+ input files.  
+		4. Check edge case scenarios.
+		
+		
+Conclusion:
+
+	<A review of the project, what worked, what didn’t and how to improve upon your project in the future.>
+
+	This project reinforced the need and examination of the design of a program with the use of
+	abstract data types, especial a binary search tree.  The idea of using any other type, like a
+	linked list or array, were easy identified as a possible way to implement this solution. 
+	
+	These transition from, integers or strings, to structures as the data type in the AVL tree, reflected on the
+	process of understanding how pointers work and can be manipulated. 
+	
+
+
+

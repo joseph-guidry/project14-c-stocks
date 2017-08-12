@@ -72,9 +72,11 @@ int cmp_price(const void * a, const void * b)
 		}
 	}
 }
-
+//Take dollar and cent values and convert to double to determine the difference.
 static double evalute_value(int dollar1, int cent1, int dollar2, int cent2)
 {
+
+	//Ensure that values are both the same sign, either "+" or "-".
 	if ( dollar1 < 0 )
 		 cent1 *= -1;
 		 
@@ -87,12 +89,14 @@ static double evalute_value(int dollar1, int cent1, int dollar2, int cent2)
 	return value1 + value2;
 }
 
+//If symbol is found in the BST, the node will modify its contents with the values of the stock structure.
 void modify_node(Node ** temp, void * data)
 {
 	temp = ((Node **)temp);
 	int total_dollar, total_cent;
 	double result;
 	
+	//check if operation will result in stock price falling below $0.01
 	if( (result = evalute_value( ((stock*)(*temp)->key)->dollar, ((stock*)(*temp)->key)->cent, ((stock*)data)->dollar, ((stock*)data)->cent )) <= 0.00 )
 	{
 		fprintf(stderr, "Transaction puts value below $0.01\n");
@@ -100,6 +104,7 @@ void modify_node(Node ** temp, void * data)
 	}
 	else
 	{
+		//IF value is not a negative, then convert double back to int pieces.
 		total_dollar = (int) (result /1);
 		total_cent = ((double)(result - total_dollar) * 100 + 0.5) ;
 	}
@@ -110,7 +115,6 @@ void modify_node(Node ** temp, void * data)
 }
 
 
-
 double convert_to_price(int dollar, int cent)
 {
 	double value = 0.0;
@@ -119,3 +123,4 @@ double convert_to_price(int dollar, int cent)
 	
 	return value;
 }
+
